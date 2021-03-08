@@ -28,11 +28,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpg-jdk16 -->
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpg-jdk15on -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpg-jdk16</artifactId>
-            <version>1.46</version>
+            <artifactId>bcpg-jdk15on</artifactId>
+            <version>1.68</version>
         </dependency>
     </dependencies>
 

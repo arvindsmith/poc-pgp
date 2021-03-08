@@ -1,12 +1,9 @@
 package com.teksystems.pgp.service;
 
-import org.bouncycastle.openpgp.PGPException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.NoSuchProviderException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,13 +51,13 @@ class EncryptionServiceTest {
 
     @Test
     @Order(1)
-    void encryptFile()	throws NoSuchProviderException, IOException, PGPException {
+    void encryptFile() throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         logger.info("encryptTest()");
 
         encryptionService.encryptFile(originalFilePath,
-                new FileInputStream(publicKeyFilePath),
-                new FileOutputStream(encryptFilePath));
+                publicKeyFilePath,
+                encryptFilePath,false,false);
 
         assertEquals((new File(encryptFilePath)).exists(), true);
 
@@ -73,13 +70,13 @@ class EncryptionServiceTest {
 
     @Test
     @Order(2)
-    void decryptFile() throws NoSuchProviderException, IOException, PGPException {
+    void decryptFile() throws Exception {
 
         logger.info("decryptTest()");
 
-        encryptionService.decryptFile(new FileInputStream(encryptFilePath),
-                new FileOutputStream(decryptFilePath),
-                new FileInputStream(secretKeyFilePath), passphrase);
+        encryptionService.decryptFile(encryptFilePath,
+                decryptFilePath,
+                secretKeyFilePath, passphrase);
 
         assertEquals((new File(decryptFilePath)).exists(), true);
 
