@@ -1,22 +1,15 @@
-package com.teksystems.pgp.service;
+package com.teksystems.pgp;
 
-import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class JasyptEncryptionTest {
-
-    @Autowired
-    private StringEncryptor stringEncryptor;
 
     @Test
     public void encryptAndDecryptUsingSamePasswords() {
@@ -103,18 +96,4 @@ public class JasyptEncryptionTest {
 
     }
 
-    @Test
-    public void encryptAndDecryptUsingSpringManagedBean(){
-        //Given
-        String privateData = "secret-data";
-
-        //When
-        String myEncryptedText = stringEncryptor.encrypt(privateData);
-        assertNotSame(privateData, myEncryptedText);
-
-        // then
-        String plainText = stringEncryptor.decrypt(myEncryptedText);
-        assertEquals(plainText, privateData);
-
-    }
 }
