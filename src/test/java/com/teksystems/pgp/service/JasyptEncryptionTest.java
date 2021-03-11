@@ -1,17 +1,25 @@
 package com.teksystems.pgp.service;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class JasyptEncryptionTest {
+
+    @Autowired
+    private StringEncryptor stringEncryptor;
+
     @Test
-    public void givenTextPrivateData_whenDecrypt_thenCompareToEncrypted() {
+    public void encryptAndDecryptUsingSamePasswords() {
         // given
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         BasicTextEncryptor textDecryptor = new BasicTextEncryptor();
@@ -29,7 +37,7 @@ public class JasyptEncryptionTest {
     }
 
     @Test
-    public void givenTextPrivateData_whenDecryptWithWrongPassword_thenThrowException() {
+    public void encryptAndDecryptUsingDifferentPasswordsThrowException() {
         // given
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         BasicTextEncryptor textDecryptor = new BasicTextEncryptor();
@@ -49,7 +57,7 @@ public class JasyptEncryptionTest {
     }
 
     @Test
-    public void givenTextPassword_whenOneWayEncryption_thenCompareEncryptedPasswordsShouldBeSame() {
+    public void checkPasswordOfEncryptorIsSame() {
         String password = "secret-pass";
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
@@ -63,7 +71,7 @@ public class JasyptEncryptionTest {
     }
 
     @Test
-    public void givenTextPassword_whenOneWayEncryption_thenCompareEncryptedPasswordsShouldNotBeSame() {
+    public void checkPasswordOfEncryptorIsDifferent() {
         String password = "secret-pass";
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(password);
@@ -76,7 +84,7 @@ public class JasyptEncryptionTest {
     }
 
     @Test
-    public void givenPassowrd_whenEcryptByPBEStringEncryptor_thenDecryptStringIsSame(){
+    public void encryptAndDecryptUsingStandardPBEStringEncryptor(){
         //Given
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
         String privateData = "secret-data";
@@ -91,6 +99,21 @@ public class JasyptEncryptionTest {
         //when
         String plainText = encryptor.decrypt(encryptedText);
         //then
+        assertEquals(plainText, privateData);
+
+    }
+
+    @Test
+    public void encryptAndDecryptUsingSpringManagedBean(){
+        //Given
+        String privateData = "secret-data";
+
+        //When
+        String myEncryptedText = stringEncryptor.encrypt(privateData);
+        assertNotSame(privateData, myEncryptedText);
+
+        // then
+        String plainText = stringEncryptor.decrypt(myEncryptedText);
         assertEquals(plainText, privateData);
 
     }
