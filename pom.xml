@@ -13,9 +13,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>pgp-poc</name>
     <description>POC project for PGP encyption decryption</description>
-    <properties>
-        <java.version>11</java.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -36,7 +33,7 @@
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.3</version>
         </dependency>
     </dependencies>
 
