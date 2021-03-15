@@ -24,3 +24,19 @@ Instructions to **generate public and secret key** to encrypt/decrypt files or m
 - export a secret key:
 
   	$ gpg -a --export-secret-keys > [path-to-secret-key].asc
+
+KeyBasedFileProcessor
+
+A simple utility class that encrypts/decrypts public key based encryption files.
+
+To encrypt a file: KeyBasedFileProcessor -e [-a|-ai] fileName publicKeyFile.
+If -a is specified the output file will be "ascii-armored". If -i is specified the output file will be have integrity checking added.
+
+To decrypt: KeyBasedFileProcessor -d fileName secretKeyFile passPhrase.
+
+Note 1: this example will silently overwrite files, nor does it pay any attention to the specification of "_CONSOLE" in the filename. It also expects that a single pass phrase will have been used.
+
+Note 2: if an empty file name has been specified in the literal data object contained in the encrypted packet a file with the name filename.out will be generated in the current working directory.
+
+
+
