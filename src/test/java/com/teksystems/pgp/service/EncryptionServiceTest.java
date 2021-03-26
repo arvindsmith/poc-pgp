@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -51,13 +50,11 @@ class EncryptionServiceTest {
 
     @Test
     @Order(1)
-    void encryptFile() throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    void encryptFile() throws Exception {
 
         logger.info("encryptTest()");
 
-        encryptionService.encryptFile(originalFilePath,
-                publicKeyFilePath,
-                encryptFilePath,false,false);
+        encryptionService.encryptFile(originalFilePath,publicKeyFilePath);
 
         assertEquals((new File(encryptFilePath)).exists(), true);
 
@@ -82,7 +79,7 @@ class EncryptionServiceTest {
 
         List<String> fileContent = Files.readAllLines(Paths.get(decryptFilePath));
 
-        assertTrue(fileContent.containsAll(Files.readAllLines(Paths.get(decryptFilePath))));
+        assertTrue(fileContent.containsAll(Files.readAllLines(Paths.get(originalFilePath))));
 
     }
 }
